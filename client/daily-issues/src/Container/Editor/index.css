@@ -1,0 +1,43 @@
+.mdEditor {
+  height: 90%;
+  overflow: hidden;
+}
+.rc-md-editor .editor-container .sec-md .input {
+  padding-top: 60px;
+}
+.rc-md-editor .editor-container .sec-html .html-wrap {
+  padding-top: 40px;
+}
+[class^="rmel-icon-"], [class*="rmel-icon-"] {
+  font-size: 12px;
+}
+.rc-md-navigation .button-wrap .button {
+  position: relative;
+  min-width: 0;
+  height: auto;
+  margin-right: 0;
+  display: inline-block;
+  cursor: pointer;
+  line-height: 0;
+  text-align: center;
+  color: #999;
+}
+.drop-wrap {
+  background-color: inherit
+}
+.custom-html-style {
+  text-align: left;
+}
+.title {
+  display: flex;
+}
+.titleInput {
+  flex-grow: 1;
+}
+.titleButton {
+  width: 120px;
+  margin-left: 30px;
+}
+.titleButton> button {
+  margin-top: 18px;
+}

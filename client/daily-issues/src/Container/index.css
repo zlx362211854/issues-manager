@@ -1,0 +1,51 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row
+}
+.list {
+  width: 260px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  min-width: 260px;
+  max-width: 260px;
+  background-color: #fafafa;
+}
+.account {
+  width: 260px;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+}
+.add {
+  position: fixed;
+  bottom: 10px;
+  left: 180px;
+}
+.add>button {
+  background-color: #3fb559
+}
+.add>button:hover {
+  background-color: #52d468
+}
+.content {
+  padding: 20px;
+  flex-grow: 1;
+  background-color: #fffeff;
+  overflow-y: auto;
+}
+.issuesList {
+  width: 100%;
+  height: 100%;
+  list-style: none;
+}
+.issue {
+  width: 100%;
+  height: 60px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+}
