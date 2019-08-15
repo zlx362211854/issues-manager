@@ -1,0 +1,21 @@
+{
+  "name": "daily-issues",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "packmac": "sudo electron-packager . Daily --platform=darwin --out=./pack/darwin --ignore=node_modules --ignore=client/daily --overwrite --app-version=0.0.1",
+    "packwin": "electron-packager . Daily --platform=win32 --out=./pack/win --overwrite --app-version=0.0.1",
+    "packall": "electron-packager . Daily --platform=all --arch=all --out=./pack/all --overwrite --app-version=0.0.1"
+  },
+  "author": "zlx",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^6.0.2"
+  },
+  "dependencies": {
+    "electron-packager": "^14.0.4"
+  }
+}
