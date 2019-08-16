@@ -1,0 +1,6 @@
+.typography {
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 18px !important;
+}

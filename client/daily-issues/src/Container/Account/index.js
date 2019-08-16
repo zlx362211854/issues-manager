@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import './index.css'
 export default function Lists(props) {
   const [openMenu, setOpenMenu] = useState(null);
   const [openMenuBool, setOpenMenuBool] = useState(false);
@@ -27,7 +28,7 @@ export default function Lists(props) {
     <div>
       <AppBar position="static" color="default">
         <Toolbar>
-          <Typography variant="h6" color="inherit">
+          <Typography variant="h6" color="inherit" className="typography">
             {localAccount.login}
           </Typography>
           <Avatar

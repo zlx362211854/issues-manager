@@ -50,7 +50,7 @@ export default function Editor(props) {
   }
   const newIssue = ({title, text}) => {
     var opts = {
-      // token: '7a2ef9eb719f616af10485fb9ba260b8fc0a98f7',
+      // token: '83fddad3c4a1a67fc801ced2fb35e9e4c171d49b',
       token: props.account.token,
       body: text
     };
