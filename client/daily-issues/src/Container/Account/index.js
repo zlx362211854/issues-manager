@@ -9,7 +9,7 @@ import './index.css'
 export default function Lists(props) {
   const [openMenu, setOpenMenu] = useState(null);
   const [openMenuBool, setOpenMenuBool] = useState(false);
-  const localAccount = JSON.parse(window.localStorage.getItem('account'));
+  const localAccount = props.account;
   const handleMenu = e => {
     setOpenMenu(e.currentTarget);
     setOpenMenuBool(true);
@@ -19,8 +19,7 @@ export default function Lists(props) {
     setOpenMenuBool(false);
   };
   const handleLogout = () => {
-    window.localStorage.removeItem('account');
-    window.localStorage.removeItem('token');
+    props.IPC.send('setData', 'account', {});
     handleClose();
     props.onOk();
   };

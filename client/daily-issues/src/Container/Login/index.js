@@ -22,8 +22,7 @@ export default function Login(props) {
             new window.Notification(username, {
               body: 'successful!'
             })
-            window.localStorage.setItem('account', JSON.stringify(resp))
-            window.localStorage.setItem('token', token);
+            props.IPC.send('setData', 'account', {...resp, token})
             props.onOk({account: resp, token})
           }
         } else {

@@ -16,6 +16,7 @@
     "electron": "^6.0.2"
   },
   "dependencies": {
-    "electron-packager": "^14.0.4"
+    "electron-packager": "^14.0.4",
+    "lndb": "^0.0.3"
   }
 }

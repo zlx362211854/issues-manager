@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import Lists from './Lists';
 import Comments from './Comments';
 import Editor from './Editor';
@@ -7,12 +7,33 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Login from './Login';
 import Account from './Account';
+const IPC = window.require('electron').ipcRenderer;
+
+// export default function Container() {
+//   const [account setAccount] = useState(null)
+//   IPC.on('getDataFromEle', (event, option) => {
+//     const {dbname, data} = option;
+//     setAccount(data)
+//   });
+
+//   return () {
+
+//   }
+// }
 export default class Container extends Component {
   state = {
     issue: {},
-    edit: false,
-    login: false
+    edit: false
   };
+  componentWillMount() {
+    IPC.on('getDataFromEle', (event, option) => {
+      const {dbname, data} = option;
+      this.setState({
+        account: data
+      });
+    });
+    IPC.send('getData', 'account');
+  }
   openComments = issue => {
     this.setState({
       issue,
@@ -33,47 +54,43 @@ export default class Container extends Component {
     });
   };
   onLoginSuccess = ({ account, token }) => {
-    this.setState({
-      login: true
-    });
+    IPC.send('getData', 'account');
   };
   onLogOutSuccess = () => {
-    this.setState({
-      login: false
-    });
-  }
+    IPC.send('getData', 'account');
+  };
   render() {
-    const {issue, edit, login} = this.state;
-    const token = window.localStorage.getItem('token')
-    const localAccount = JSON.parse(window.localStorage.getItem('account'));
-    if (localAccount) {
-      localAccount.token = token;
-    }
-    if (login || localAccount) {
-      return (
-        <div className="container">
-          <div className="list">
-            <div className="account">
-              <Account onOk={this.onLogOutSuccess} account={localAccount}/>
+    const {issue, edit, account} = this.state;
+    console.log(account, 'account')
+    if (account) {
+      if (account.login) {
+        return (
+          <div className="container">
+            <div className="list">
+              <div className="account">
+                <Account onOk={this.onLogOutSuccess} account={account} IPC={IPC} />
+              </div>
+              <Lists openComments={this.openComments} account={account} />
+              <div className="add" onClick={this.openEditor}>
+                <Fab aria-label="add">
+                  <AddIcon account={account} />
+                </Fab>
+              </div>
             </div>
-            <Lists openComments={this.openComments} account={localAccount}/>
-            <div className="add" onClick={this.openEditor}>
-              <Fab aria-label="add">
-                <AddIcon account={localAccount}/>
-              </Fab>
+            <div className="content" style={{height: window.innerHeight}}>
+              {edit ? (
+                <Editor closeEditor={this.closeEditor} account={account} />
+              ) : (
+                  <Comments issue={issue} account={account} />
+                )}
             </div>
           </div>
-          <div className="content" style={{ height: window.innerHeight }}>
-            {edit ? (
-              <Editor closeEditor={this.closeEditor} account={localAccount}/>
-            ) : (
-              <Comments issue={issue} account={localAccount}/>
-            )}
-          </div>
-        </div>
-      );
+        );
+      } else {
+        return <Login onOk={this.onLoginSuccess} account={account} IPC={IPC} />;
+      }
     } else {
-      return <Login onOk={this.onLoginSuccess} account={localAccount}/>;
+      return <div />
     }
   }
 }
