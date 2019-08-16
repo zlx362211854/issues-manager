@@ -11,14 +11,24 @@ import ajax from '../../ajax';
 import './index.css'
 export default function Lists(props) {
   const [issues, setIssues] = useState([]);
+  const [timer, setTimer] = useState(null);
   useEffect(() => {
-    getIssues()
+    getIssues();
+    const timer = setInterval(() => {
+      getIssues();
+    }, 10000)
+    setTimer(timer)
+    return () => {
+      timer && clearInterval(timer)
+    }
   }, [])
   const getIssues = () => {
-    ajax('https://api.github.com/repos/zlx362211854/daily-study/issues').then(
+    ajax('https://api.github.com/repos/'+props.account.login+'/daily-study/issues').then(
       resp => {
         if (resp) {
-          setIssues(resp);
+          if (issues.length != resp.length) {
+            setIssues(resp);
+          }
         }
       }
     );

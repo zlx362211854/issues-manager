@@ -17,8 +17,8 @@ function createWindow () {
   })
 
   // 加载index.html文件
-  win.loadFile(path.join(__dirname, './client/build/index.html'))
-  // win.loadURL('http://localhost:3000')
+  // win.loadFile(path.join(__dirname, './client/build/index.html'))
+  win.loadURL('http://localhost:3000')
 
   win.on('ready-to-show', () => {
     win.show()

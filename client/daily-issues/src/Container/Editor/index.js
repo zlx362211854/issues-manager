@@ -50,8 +50,8 @@ export default function Editor(props) {
   }
   const newIssue = ({title, text}) => {
     var opts = {
-      // token: '0c4183108e289559b89fe51bfdfe29a041097c65',
-      token: window.localStorage.getItem('token'),
+      // token: '7a2ef9eb719f616af10485fb9ba260b8fc0a98f7',
+      token: props.account.token,
       body: text
     };
     createIssue(

@@ -17,8 +17,7 @@ export default function Login(props) {
   const validate = () => {
     if (username && token) {
       ajax('https://api.github.com/user?access_token=' + token).then((resp) => {
-        console.log(resp, 'rrrrrrr')
-        if (resp) {
+        if (resp.login) {
           if (resp.login === username) {
             new window.Notification(username, {
               body: 'successful!'
@@ -27,6 +26,10 @@ export default function Login(props) {
             window.localStorage.setItem('token', token);
             props.onOk({account: resp, token})
           }
+        } else {
+          new window.Notification('Account validation failed!', {
+            body: 'please check whether your account and token is correct'
+          })
         }
       })
     }
