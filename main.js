@@ -5,7 +5,7 @@ const IPC = require('electron').ipcMain;
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
-const adapter = new FileSync('db/account.json');
+const adapter = new FileSync(`${__dirname}/db/account.json`);
 const db = low(adapter);
 db.defaults({account: {} }).write();
 // 保持对window对象的全局引用，如果不这么做的话，当JavaScript对象被
@@ -24,18 +24,19 @@ function createWindow() {
   });
 
   // 加载index.html文件
-  // win.loadFile(path.join(__dirname, './client/build/index.html'))
-  win.loadURL('http://localhost:3000');
+  win.loadFile(path.join(__dirname, './client/build/index.html'))
+  // win.loadURL('http://localhost:3000');
 
   win.on('ready-to-show', () => {
     win.show();
   });
+  // client向数据库写数据
   IPC.on('setData', (e, dbname, data) => {
     db.set(dbname, data).write();
   });
+  // client从数据库读数据
   IPC.on('getData', (e, dbname) => {
     const data = db.get(dbname).value();
-    console.log(dbname, data, 'getData-------');
     win.send('getDataFromEle', { dbname, data });
   });
   // 打开开发者工具
