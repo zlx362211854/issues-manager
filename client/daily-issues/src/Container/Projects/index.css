@@ -1,0 +1,11 @@
+.projectList {
+  margin: auto !important;
+}
+.projectContainer {
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

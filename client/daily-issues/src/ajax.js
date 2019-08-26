@@ -1,6 +1,6 @@
-const ajax = (url) => {
+const ajax = (url, init) => {
   return new Promise((resolve, reject) => {
-    fetch(url).then((response) => {
+    fetch(url, init).then((response) => {
       return response.json();
     }).then(resp => {
       resolve(resp)

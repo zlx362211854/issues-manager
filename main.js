@@ -1,17 +1,62 @@
 const path = require('path');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 
 const IPC = require('electron').ipcMain;
 const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
+const FileAsync = require('lowdb/adapters/FileAsync');
 
-const adapter = new FileSync(`${__dirname}/db/account.json`);
-const db = low(adapter);
-db.defaults({account: {} }).write();
+function createDb(dbname, initData = {}) {
+  const adapter = new FileAsync(`${__dirname}/db/${dbname}.json`);
+  return low(adapter).then(db => {
+    db.defaults({ [dbname]: initData }).write();
+    return db;
+  });
+}
+const account = createDb('account');
+const projects = createDb('projects', []);
+Promise.all([account, projects]).then(([account, projects]) => {
+  const dbs = {
+    account,
+    projects
+  };
+  // client向数据库写数据
+  IPC.on('setData', (e, dbname, data, opt = {}) => {
+    const { fresh, type = 'set' } = opt;
+    if (type === 'push') {
+      dbs[dbname].get(dbname)
+        .push(data)
+        .write()
+        .then(() => {
+          if (fresh) {
+            console.log('get fresh data');
+            const freshData = dbs[dbname].get(dbname).value();
+            win.send('getDataFromEle', { dbname, data: freshData });
+          }
+        });
+    } else if (type === 'set') {
+      dbs[dbname]
+        .set(dbname, data)
+        .write()
+        .then(() => {
+          if (fresh) {
+            console.log('get fresh data');
+            const freshData = dbs[dbname].get(dbname).value();
+            win.send('getDataFromEle', { dbname, data: freshData });
+          }
+        });
+    }
+  });
+  // client从数据库读数据
+  IPC.on('getData', (e, dbname) => {
+    // console.log('--------', dbs, dbname)
+    const data = dbs[dbname].get(dbname).value();
+    win.send('getDataFromEle', { dbname, data });
+  });
+});
+
 // 保持对window对象的全局引用，如果不这么做的话，当JavaScript对象被
 // 垃圾回收的时候，window对象将会自动的关闭
 let win;
-
 function createWindow() {
   // 创建浏览器窗口。
   win = new BrowserWindow({
@@ -24,21 +69,13 @@ function createWindow() {
   });
 
   // 加载index.html文件
-  win.loadFile(path.join(__dirname, './client/build/index.html'))
-  // win.loadURL('http://localhost:3000');
+  // win.loadFile(path.join(__dirname, './client/build/index.html'))
+  win.loadURL('http://localhost:3000');
 
   win.on('ready-to-show', () => {
     win.show();
   });
-  // client向数据库写数据
-  IPC.on('setData', (e, dbname, data) => {
-    db.set(dbname, data).write();
-  });
-  // client从数据库读数据
-  IPC.on('getData', (e, dbname) => {
-    const data = db.get(dbname).value();
-    win.send('getDataFromEle', { dbname, data });
-  });
+
   // 打开开发者工具
   win.webContents.openDevTools();
 
