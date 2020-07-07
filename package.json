@@ -13,7 +13,7 @@
   "author": "zlx",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^6.0.2"
+    "electron": "^9.1.0"
   },
   "dependencies": {
     "electron-packager": "^14.0.4",
